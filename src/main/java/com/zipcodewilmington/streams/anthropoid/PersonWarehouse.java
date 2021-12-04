@@ -4,10 +4,7 @@ import com.zipcodewilmington.streams.tools.ReflectionUtils;
 import com.zipcodewilmington.streams.tools.logging.LoggerHandler;
 import com.zipcodewilmington.streams.tools.logging.LoggerWarehouse;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,18 +47,18 @@ public final class PersonWarehouse implements Iterable<Person> {
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
         List<String> listUniqueName = people.stream()
-        .map(Person::getName)
-        .sorted()
-        .distinct()
-        .collect(Collectors.toList());
-          List<Person> uniqueName = new ArrayList<>();
-          people.stream()
-                  .forEach(person -> {
-                      if (listUniqueName.contains(person.getName())) {
-                          uniqueName.add(person);
-                          listUniqueName.remove(person.getName());
-                      }
-                  });
+                .map(Person::getName)
+                .sorted()
+                .distinct()
+                .collect(Collectors.toList());
+        List<Person> uniqueName = new ArrayList<>();
+        people.stream()
+                .forEach(person -> {
+                    if (listUniqueName.contains(person.getName())) {
+                        uniqueName.add(person);
+                        listUniqueName.remove(person.getName());
+                    }
+                });
 
         return uniqueName.stream();
     }
@@ -84,7 +81,7 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getFirstNUniquelyNamedPeople(int n) {
-        return  getUniquelyNamedPeople().limit(n);
+        return getUniquelyNamedPeople().limit(n);
 
     }
 
@@ -92,7 +89,11 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a mapping of Person Id to the respective Person name
      */ // TODO
     public Map<Long, String> getIdToNameMap() {
-        return null;
+
+        Map<Long, String> newIdMap = people.stream()
+                .collect(Collectors.toMap(Person::getPersonalId, Person::getName));
+
+        return newIdMap;
     }
 
 
@@ -100,7 +101,7 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of Stream of Aliases
      */ // TODO
     public Stream<Stream<String>> getNestedAliases() {
-        return null;
+        return Stream.of(getAllAliases());
     }
 
 
@@ -108,7 +109,11 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return Stream of all Aliases
      */ // TODO
     public Stream<String> getAllAliases() {
-        return null;
+
+        Stream<String> allAlliasesList = people.stream()
+                .flatMap(person ->
+                        Arrays.stream(person.getAliases()));
+        return allAlliasesList;
     }
 
     // DO NOT MODIFY
