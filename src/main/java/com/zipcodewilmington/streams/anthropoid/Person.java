@@ -53,7 +53,6 @@ public class Person implements Comparable<Person> {
         return aliases;
     }
 
-
     @Override // implemented for comparison purposes
     public String toString() {
         ObjectMapper mapper = new ObjectMapper();

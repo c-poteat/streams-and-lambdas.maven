@@ -70,7 +70,6 @@ public final class PersonFactory {
         return newListPerosn;
     }
 
-
     /**
      * Section 8.2
      *
